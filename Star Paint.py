@@ -380,7 +380,7 @@ while running:
             rcn = screen.map_rgb(color)#Replacement color in pygame format
             pxarray = PixelArray(screen)#Initialize pixelarray
             dcn = pxarray[mx,my]#color that was at the starting pixel location
-            fillPoints = set([(mx,my)])#Queued pixel locations to check using BFS
+            fillPoints = set([(mx,my)])#Queued pixel locations to check using flood-fill algorithm
             while fillPoints:
                 px,py = fillPoints.pop()#Pop from queue to check if that pixel location is valid for filling
                 oldColor = pxarray[px,py]#color before filling at pixel point
