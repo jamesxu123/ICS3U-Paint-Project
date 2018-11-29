@@ -39,6 +39,7 @@ display.set_caption('Star Paint')#Set Window Caption
 operating_system = sys.platform#Get operating system
 shift_key = K_LSHIFT
 if operating_system == 'darwin':#If OS == Darwin (macOS) use 'Command' instead of control
+    print(operating_system)
     control_modifier = 310
 else:
     control_modifier = K_LCTRL#Otherwise use Left Control
@@ -50,7 +51,7 @@ image_as_object = {}#Dictionary for images to be stored in this format- mode: im
 screen = display.set_mode((1440, 900))
 imageAssetsMenu3 = [names for names in os.listdir() if names.endswith('.png') and names != 'Paint2.png']
 running = True
-##gif_assets = [transform.scale(image.load('GIF/'+i).convert(),(200,150)) for i in os.listdir('GIF')]
+gif_assets = [transform.scale(image.load('GIF/'+i).convert(),(200,150)) for i in os.listdir('GIF')]
 gif_counter = 0
 mode = 'pencil'#Default mode is pencil
 color = (55, 153, 251)#Default color
@@ -238,14 +239,14 @@ while running:
     tss = base.copy().subsurface(Rect(0,740,260,140))#Area underneath shape text
     screen.blit(tss, (0,740))#Blit subsurface of no text under to avoid ugly remains when reblitting text over text
     screen.blit(stxt, (80,781))#Blit text
-##    if gif_counter % 10 == 0:#Every 10th cycle of loop, blit one frame
-##        a,b,c,d = [25,15,200,150]#Position of gif in Rect() format
-##        subsurface_gif = base.copy().subsurface(Rect(a,b,c,d))
-##        screen.blit(subsurface_gif,(a,b))#Blit subsurface to avoid problem of gif overlapping old gif
-##        screen.blit(gif_assets[gif_counter//10],(25,15))#Blit the gif
+    if gif_counter % 10 == 0:#Every 10th cycle of loop, blit one frame
+        a,b,c,d = [25,15,200,150]#Position of gif in Rect() format
+        subsurface_gif = base.copy().subsurface(Rect(a,b,c,d))
+        screen.blit(subsurface_gif,(a,b))#Blit subsurface to avoid problem of gif overlapping old gif
+        screen.blit(gif_assets[gif_counter//10],(25,15))#Blit the gif
     gif_counter += 1
-##    if gif_counter >= 10*len(gif_assets):#Reset once counter exceeds 10 * length of list to avoid index error
-##        gif_counter = 0
+    if gif_counter >= 10*len(gif_assets):#Reset once counter exceeds 10 * length of list to avoid index error
+        gif_counter = 0
     for i in image_as_object.keys():#Loop through blitted tool icons
         buttonRect = image_as_object[i]
         a,b,c,d = buttonRect
@@ -380,7 +381,7 @@ while running:
             rcn = screen.map_rgb(color)#Replacement color in pygame format
             pxarray = PixelArray(screen)#Initialize pixelarray
             dcn = pxarray[mx,my]#color that was at the starting pixel location
-            fillPoints = set([(mx,my)])#Queued pixel locations to check using flood-fill algorithm
+            fillPoints = set([(mx,my)])#Queued pixel locations to check using BFS
             while fillPoints:
                 px,py = fillPoints.pop()#Pop from queue to check if that pixel location is valid for filling
                 oldColor = pxarray[px,py]#color before filling at pixel point
